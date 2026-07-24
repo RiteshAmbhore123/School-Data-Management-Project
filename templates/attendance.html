@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Attendance - Jijamata Balvidhya Mandir, Sangli-416301{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Attendance</h1>
+    <p class="subtitle">Mark daily attendance for a selected class.</p>
+  </div>
+</div>
+
+<form method="GET" class="filter-row">
+  <div class="form-field">
+    <label class="field-label">Class</label>
+    <select class="field-input" name="class_name" onchange="this.form.submit()">
+      {% for c in CLASSES %}
+        <option value="{{ c }}" {{ 'selected' if class_name == c }}>Standard {{ c }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-field">
+    <label class="field-label">Date</label>
+    <input class="field-input" type="date" name="date" value="{{ att_date }}" onchange="this.form.submit()">
+  </div>
+</form>
+
+<p class="subtitle" style="margin: 4px 0 16px;">
+  {% if not class_students %}
+    No students are enrolled in this class yet.
+  {% else %}
+    {{ present_count }} of {{ class_students|length }} marked present for {{ att_date }}.
+  {% endif %}
+</p>
+
+{% if class_students %}
+<form method="POST" class="panel">
+  <input type="hidden" name="class_name" value="{{ class_name }}">
+  <input type="hidden" name="date" value="{{ att_date }}">
+  {% for s in class_students %}
+  <div class="attendance-row">
+    <div>
+      <div class="strong">{{ s.name }}</div>
+      <div class="mono muted">Roll {{ s.roll_no }}</div>
+    </div>
+    <div class="attendance-options">
+      <label class="pill pill-present {{ 'active' if records.get(s.id) == 'present' }}">
+        <input type="radio" name="status_{{ s.id }}" value="present" {{ 'checked' if records.get(s.id) == 'present' }}> Present
+      </label>
+      <label class="pill pill-absent {{ 'active' if records.get(s.id) == 'absent' }}">
+        <input type="radio" name="status_{{ s.id }}" value="absent" {{ 'checked' if records.get(s.id) == 'absent' }}> Absent
+      </label>
+    </div>
+  </div>
+  {% endfor %}
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Save attendance</button>
+  </div>
+</form>
+{% endif %}
+{% endblock %}
+

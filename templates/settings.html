@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Settings - Jijamata Balvidhya Mandir, Sangli-416301{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Settings</h1>
+    <p class="subtitle">Manage login credentials for the two register accounts.</p>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Change password</h3>
+  <form method="POST" class="form-grid">
+    <div class="form-field form-field-wide">
+      <label class="field-label">Account</label>
+      <select class="field-input" name="role">
+        {% for u in users %}
+          <option value="{{ u.role }}">{{ u.display_name }} ({{ u.username }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-field form-field-wide">
+      <label class="field-label">Current password</label>
+      <input class="field-input" type="password" name="current_password" required>
+    </div>
+    <div class="form-field">
+      <label class="field-label">New password</label>
+      <input class="field-input" type="password" name="new_password" required>
+    </div>
+    <div class="form-field">
+      <label class="field-label">Confirm new password</label>
+      <input class="field-input" type="password" name="confirm_password" required>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Update password</button>
+    </div>
+  </form>
+</div>
+
+<div class="hint-box" style="margin-top: 20px;">
+  Data is stored in a real SQLite database file (<code>instance/school.db</code>) on the server,
+  with passwords hashed &mdash; not stored as plain text. For production use, run behind HTTPS,
+  set a strong <code>SCHOOL_APP_SECRET_KEY</code> environment variable, and consider a managed
+  database such as PostgreSQL.
+</div>
+{% endblock %}
+

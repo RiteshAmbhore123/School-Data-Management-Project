@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit student' if student else 'Add student' }} - Jijamata Balvidhya Mandir, Sangli-416301{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>{{ 'Edit student' if student else 'Add student' }}</h1>
+    <p class="subtitle">Fields marked * are required.</p>
+  </div>
+</div>
+
+<form method="POST" class="panel form-grid">
+  <div class="form-field">
+    <label class="field-label">Full name *</label>
+    <input class="field-input" type="text" name="name" value="{{ student.name if student else '' }}" required>
+  </div>
+  <div class="form-field">
+    <label class="field-label">Roll number *</label>
+    <input class="field-input" type="text" name="roll_no" value="{{ student.roll_no if student else '' }}" required>
+  </div>
+  <div class="form-field">
+    <label class="field-label">Class *</label>
+    <select class="field-input" name="class_name">
+      {% for c in CLASSES %}
+        <option value="{{ c }}" {{ 'selected' if student and student.class_name == c }}>Standard {{ c }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-field">
+    <label class="field-label">Section</label>
+    <select class="field-input" name="section">
+      {% for s in SECTIONS %}
+        <option value="{{ s }}" {{ 'selected' if student and student.section == s }}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-field">
+    <label class="field-label">Gender</label>
+    <select class="field-input" name="gender">
+      {% for g in ['Male', 'Female', 'Other'] %}
+        <option value="{{ g }}" {{ 'selected' if student and student.gender == g }}>{{ g }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-field">
+    <label class="field-label">Date of birth</label>
+    <input class="field-input" type="date" name="dob" value="{{ student.dob if student else '' }}">
+  </div>
+  <div class="form-field">
+    <label class="field-label">Parent / guardian name</label>
+    <input class="field-input" type="text" name="parent_name" value="{{ student.parent_name if student else '' }}">
+  </div>
+  <div class="form-field">
+    <label class="field-label">Contact number *</label>
+    <input class="field-input" type="text" name="contact" value="{{ student.contact if student else '' }}" required>
+  </div>
+  <div class="form-field">
+    <label class="field-label">Admission date</label>
+    <input class="field-input" type="date" name="admission_date" value="{{ student.admission_date if student else '' }}">
+  </div>
+  <div class="form-field">
+    <label class="field-label">Blood group</label>
+    <input class="field-input" type="text" name="blood_group" placeholder="e.g. O+" value="{{ student.blood_group if student else '' }}">
+  </div>
+  <div class="form-field form-field-wide">
+    <label class="field-label">Address</label>
+    <input class="field-input" type="text" name="address" value="{{ student.address if student else '' }}">
+  </div>
+
+  <div class="form-actions">
+    <a href="{{ url_for('students') }}" class="btn btn-ghost">Cancel</a>
+    <button type="submit" class="btn btn-primary">Save student</button>
+  </div>
+</form>
+{% endblock %}
+

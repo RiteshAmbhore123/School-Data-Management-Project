@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Sign in - Jijamata Balvidhya Mandir, Sangli-416301{% endblock %}
+{% block auth_content %}
+<div class="login-screen">
+  <div class="login-side">
+    <div>
+      <div class="brand"><span class="brand-mark">&#9776;</span><span class="brand-name">Jijamata Balvidhya Mandir, Sangli-416301</span></div>
+      <p class="login-blurb">
+        A single ledger for admissions, class rolls, and daily attendance &mdash;
+        from Standard 1 through Standard 10.
+      </p>
+    </div>
+    <div class="login-footnote">Access is restricted to the Administrator and the Principal.</div>
+  </div>
+  <div class="login-form-wrap">
+    <form method="POST" class="login-form">
+      <h2>Sign in to continue</h2>
+      <p class="login-sub">Choose your role, then enter your credentials.</p>
+
+      <div class="role-toggle">
+        <label class="role-option">
+          <input type="radio" name="role" value="admin" checked>
+          <span>Administrator</span>
+        </label>
+        <label class="role-option">
+          <input type="radio" name="role" value="principal">
+          <span>Principal</span>
+        </label>
+      </div>
+
+      <label class="field-label" for="username">Username</label>
+      <input class="field-input" type="text" id="username" name="username" placeholder="Enter username" required autocomplete="username">
+
+      <label class="field-label" for="password">Password</label>
+      <input class="field-input" type="password" id="password" name="password" placeholder="Enter password" required autocomplete="current-password">
+
+      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+
+      <div class="hint-box">
+        Demo credentials &mdash; admin / admin@123 &middot; principal / principal@123.
+        Change these from Settings after signing in.
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

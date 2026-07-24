@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Students - Jijamata Balvidhya Mandir, Sangli-416301{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Students</h1>
+    <p class="subtitle">Admissions and class rolls for Standard 1 through Standard 10.</p>
+  </div>
+  <div class="header-actions">
+    <a href="{{ url_for('export_students_csv') }}" class="btn btn-ghost">Export CSV</a>
+    <a href="{{ url_for('add_student') }}" class="btn btn-primary">Add student</a>
+  </div>
+</div>
+
+<form method="GET" class="filter-row">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search by name or roll number" class="field-input search-input">
+  <select name="class" class="field-input" onchange="this.form.submit()" style="width:160px">
+    <option value="all" {{ 'selected' if class_filter == 'all' }}>All classes</option>
+    {% for c in CLASSES %}
+      <option value="{{ c }}" {{ 'selected' if class_filter == c|string }}>Standard {{ c }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn btn-ghost">Filter</button>
+</form>
+
+<div class="class-tabs">
+  {% for c in CLASSES %}
+    {% set active = class_filter == c|string %}
+    {% if active %}
+      {% set tab_href = url_for('students', q=q) if q else url_for('students') %}
+    {% else %}
+      {% set tab_href = url_for('students', class=c, q=q) if q else url_for('students', class=c) %}
+    {% endif %}
+    <a class="class-tab {{ 'active' if active }}" href="{{ tab_href }}">
+      Std {{ c }} <span>({{ counts[c] }})</span>
+    </a>
+  {% endfor %}
+</div>
+
+<div class="panel table-panel">
+  <table>
+    <thead>
+      <tr>
+        <th>Roll</th><th>Name</th><th>Class</th><th>Gender</th><th>DOB</th>
+        <th>Parent</th><th>Contact</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if not students %}
+      <tr><td colspan="8" class="empty-row">No students match yet. Add a student to start this class roll.</td></tr>
+      {% endif %}
+      {% for s in students %}
+      <tr>
+        <td class="mono">{{ s.roll_no }}</td>
+        <td class="strong">{{ s.name }}</td>
+        <td>Std {{ s.class_name }}{{ '-' + s.section if s.section }}</td>
+        <td>{{ s.gender }}</td>
+        <td class="mono">{{ s.dob }}</td>
+        <td>{{ s.parent_name }}</td>
+        <td class="mono">{{ s.contact }}</td>
+        <td class="row-actions">
+          <a href="{{ url_for('edit_student', student_id=s.id) }}" class="icon-link">Edit</a>
+          <form method="POST" action="{{ url_for('delete_student', student_id=s.id) }}"
+                onsubmit="return confirm('Remove this student from the register?');" class="inline-form">
+            <button type="submit" class="icon-link danger">Remove</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
