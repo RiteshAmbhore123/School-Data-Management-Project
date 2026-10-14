@@ -1,87 +1,139 @@
-# School Student Management System (Python / Flask)
+# 🏥 Hospital Management System
 
-A web application for managing student admissions and attendance for
-Standard 1 through Standard 10, with a secure login for the Administrator
-and the Principal. Data is stored in a real SQLite database file, not in
-memory, so it survives restarts.
+A modern desktop-based hospital record management system built with Java Swing and Oracle Database. This project helps hospital staff efficiently store, update, search, and manage patient information in a clean and user-friendly interface.
 
-## Features
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-17%2B-orange?logo=java&logoColor=white" alt="Java" />
+  <img src="https://img.shields.io/badge/Oracle-Database-red?logo=oracle&logoColor=white" alt="Oracle Database" />
+  <img src="https://img.shields.io/badge/Swing-GUI-blue?logo=java&logoColor=white" alt="Swing GUI" />
+  <img src="https://img.shields.io/badge/Status-Active-success" alt="Status" />
+</p>
 
-- **Secure login** for two roles: Administrator and Principal (passwords
-  are hashed with Werkzeug's `generate_password_hash`, never stored in
-  plain text).
-- **Student records** by class (Standard 1–10): name, roll number, class,
-  section, gender, date of birth, parent/guardian name, contact number,
-  address, admission date, and blood group.
-- **Add / edit / delete** students, with duplicate roll-number checking
-  per class.
-- **Search and filter** students by name, roll number, or class.
-- **Attendance**: mark present/absent per class per day, with a daily
-  summary.
-- **CSV export** of the student list.
-- **Change password** for either account from the Settings page.
-- **Dashboard** with enrolment totals and a students-per-class chart.
+## ✨ Features
 
-## Requirements
+- Add new patients with personal and medical details
+- Update existing patient records
+- Delete patient entries safely
+- Search patients by name or phone number
+- View all patient records in a table
+- Input validation for age, phone number, and required fields
+- Auto table creation for the `patients` table on startup
+- Oracle database integration for persistent storage
 
-- Python 3.9+
-- Flask (the only external dependency — everything else, including the
-  database layer, uses Python's built-in `sqlite3` module)
+## 🧩 Tech Stack
 
-## Setup
+- Java Swing (desktop GUI)
+- Oracle JDBC (`ojdbc8.jar`)
+- Oracle Database XE / local Oracle instance
+- Java SE / standard library
+
+## 📁 Project Structure
+
+```text
+Hospital-Management-System-main/
+├── lib/
+│   └── ojdbc8.jar
+├── src/
+│   ├── HospitalManagementSystem.java
+│   ├── Patient.class
+│   ├── PatientDAO.class
+│   ├── PatientFormPanel.class
+│   ├── PatientTablePanel.class
+│   └── ...
+├── run.bat
+├── Final Year Report Template.doc
+└── README.md
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Before running the app, make sure you have:
+
+- Java JDK installed
+- Oracle Database installed and running locally
+- Oracle JDBC driver available in the `lib` folder
+- A database user with access to the `system` schema or equivalent
+
+### 1) Clone the repository
 
 ```bash
-# 1. Create and activate a virtual environment (recommended)
-python3 -m venv venv
-source venv/bin/activate      # on Windows: venv\Scripts\activate
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Run the app
-python app.py
+git clone https://github.com/RiteshAmbhore123/Hospital-Management-System-Java.git
+cd Hospital-Management-System-Java
 ```
 
-The app starts at `http://127.0.0.1:5000`. On first run it automatically
-creates `instance/school.db` and seeds two accounts:
+### 2) Configure database connection
 
-| Role          | Username    | Password       |
-|---------------|-------------|----------------|
-| Administrator | `admin`     | `admin@123`    |
-| Principal     | `principal` | `principal@123`|
+The app connects to Oracle using the settings in `src/HospitalManagementSystem.java`:
 
-**Change both passwords from the Settings page as soon as you sign in.**
-
-## Project structure
-
-```
-school_management/
-├── app.py                # Flask routes and application logic
-├── db.py                 # SQLite connection handling and seeding
-├── schema.sql             # Database table definitions
-├── requirements.txt
-├── templates/             # Jinja2 HTML templates
-│   ├── base.html
-│   ├── login.html
-│   ├── dashboard.html
-│   ├── students.html
-│   ├── student_form.html
-│   ├── attendance.html
-│   └── settings.html
-├── static/
-│   └── style.css          # All styling
-└── instance/
-    └── school.db           # Created automatically on first run
+```java
+private static final String URL = "jdbc:oracle:thin:@localhost:1521:XE";
+private static final String USER = "system";
+private static final String PASSWORD = "Ritesh";
 ```
 
-## Notes on security and deploying for real use
+Update these values if your local Oracle database uses different credentials or port.
 
-- This app is ready for trusted, internal school use out of the box.
-- Before exposing it beyond your own machine:
-  - Set a strong, random `SCHOOL_APP_SECRET_KEY` environment variable
-    (used to sign session cookies) instead of the built-in development key.
-  - Run it behind HTTPS (e.g. with a reverse proxy such as Nginx) and a
-    production WSGI server (e.g. `gunicorn app:app`), not Flask's
-    built-in development server.
-  - Consider moving from SQLite to a managed database like PostgreSQL if
-    multiple people will use it concurrently at scale.
+### 3) Compile and run
+
+On Windows:
+
+```bat
+run.bat
+```
+
+Or manually:
+
+```bash
+javac -cp ".;lib/ojdbc8.jar" src/*.java
+java -cp "src;lib/ojdbc8.jar" HospitalManagementSystem
+```
+
+## 🏗️ Database Behavior
+
+On startup, the application checks whether a `patients` table exists. If it doesn't, it creates one automatically with fields such as:
+
+- `id`
+- `name`
+- `age`
+- `gender`
+- `phone`
+- `address`
+- `blood_group`
+
+## 🩺 Use Case
+
+This system is designed for small to medium healthcare environments that need a simple desktop solution for managing patients without a heavy web framework. It is suitable for demos, academic projects, and hospital record tracking applications.
+
+## 📌 Notes
+
+- The project is primarily a Java Swing desktop application.
+- It is not a full hospital ERP system; it focuses on patient registration and record management.
+- If you are using a different Oracle instance, update the JDBC credentials in the database configuration section.
+
+## 🤝 Contributing
+
+Contributions are welcome! If you want to improve this project:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Open a pull request
+
+## 📜 License
+
+This project is for educational and demonstration purposes. Please check the repository license if one is added later.
+
+## 👨‍💻 Author
+
+Ritesh Ambhore
+
+---
+
+If you want, I can also make this README even more premium by adding:
+- a project logo section
+- screenshot placeholders
+- architecture diagram
+- a better "Why this project matters" section
+- a dark-mode styled GitHub README version
